@@ -1,12 +1,12 @@
 import Page from "@/components/Page.jsx"
 
-const Home = () => {
+const SignUpPage = () => {
   return (
     <Page>
-      <h1>Some title</h1>
+      <h1>Sign Up</h1>
       <p>Some content</p>
     </Page>
   )
 }
 
-export default Home
+export default SignUpPage
