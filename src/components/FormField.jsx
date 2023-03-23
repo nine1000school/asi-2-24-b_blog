@@ -6,13 +6,15 @@ const FormField = (props) => {
 
   return (
     <label className="flex flex-col gap-2">
-      <span>{label}</span>
+      <span className="text-sm font-semibold">{label}</span>
       <input
         className="rounded-sm border-2 border-neutral-200 px-3 py-1.5"
         {...otherProps}
         {...field}
       />
-      {touched && error && <span className="text-red-500">{error}</span>}
+      {touched && error && (
+        <span className="text-sm text-red-500">{error}</span>
+      )}
     </label>
   )
 }

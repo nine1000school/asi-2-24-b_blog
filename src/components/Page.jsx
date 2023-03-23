@@ -1,9 +1,16 @@
+import AppContext from "@/components/AppContext.jsx"
+import Button from "@/components/Button.jsx"
 import clsx from "clsx"
+import { useContext } from "react"
 
 const { default: Link } = require("@/components/Link.jsx")
 
 const Page = (props) => {
   const { children, className, noSpacing = false, title } = props
+  const {
+    actions: { signOut },
+    state: { session },
+  } = useContext(AppContext)
 
   return (
     <main className="flex flex-col">
@@ -13,13 +20,35 @@ const Page = (props) => {
             My BLOG
           </Link>
           <nav>
-            <ul className="flex items-center gap-2">
-              <li>
-                <Link href="/sign-in">Sign in</Link>
-              </li>
-              <li>
-                <Link href="/sign-up">Sign up</Link>
-              </li>
+            <ul className="flex items-center gap-3">
+              {session ? (
+                <>
+                  <li>
+                    <Link href="/">Home</Link>
+                  </li>
+                  <li>
+                    <Link href="/posts/create">Add a post</Link>
+                  </li>
+                  <li>
+                    <Button
+                      variant="secondary"
+                      size="inherit"
+                      onClick={signOut}
+                    >
+                      Sign out
+                    </Button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link href="/sign-in">Sign in</Link>
+                  </li>
+                  <li>
+                    <Link href="/sign-up">Sign up</Link>
+                  </li>
+                </>
+              )}
             </ul>
           </nav>
         </div>
@@ -27,7 +56,7 @@ const Page = (props) => {
       <section>
         <div
           className={clsx(
-            "mx-auto mt-8 md:max-w-4xl",
+            "mx-auto mt-8 p-4 md:max-w-4xl lg:p-0",
             {
               "flex flex-col gap-2": !noSpacing,
             },
