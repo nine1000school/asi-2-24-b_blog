@@ -1,11 +1,12 @@
 import AppContext from "@/components/AppContext.jsx"
 import Button from "@/components/Button.jsx"
+import ErrorMessage from "@/components/ErrorMessage.jsx"
 import Form from "@/components/Form.jsx"
 import FormField from "@/components/FormField.jsx"
 import Page from "@/components/Page.jsx"
 import { Formik } from "formik"
 import { useRouter } from "next/router.js"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import * as yup from "yup"
 
 const validationSchema = yup.object().shape({
@@ -14,11 +15,14 @@ const validationSchema = yup.object().shape({
 })
 
 const SignInPage = () => {
+  const [error, setError] = useState(null)
   const router = useRouter()
   const {
     actions: { signIn },
   } = useContext(AppContext)
   const handleSubmit = async (values) => {
+    setError(null)
+
     const [error, result] = await signIn(values)
 
     if (result) {
@@ -27,7 +31,7 @@ const SignInPage = () => {
       return
     }
 
-    // TODO display error
+    setError(error)
   }
 
   return (
@@ -41,6 +45,7 @@ const SignInPage = () => {
         validationSchema={validationSchema}
       >
         <Form>
+          <ErrorMessage>{error}</ErrorMessage>
           <FormField
             type="email"
             name="email"
@@ -53,7 +58,9 @@ const SignInPage = () => {
             label="Password"
             placeholder="Enter your password"
           />
-          <Button className="mt-8">Sign in</Button>
+          <Button type="submit" className="mt-8">
+            Sign in
+          </Button>
         </Form>
       </Formik>
     </Page>

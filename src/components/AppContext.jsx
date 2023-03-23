@@ -24,7 +24,21 @@ export const AppContextProvider = (props) => {
 
       return [null, true]
     } catch (err) {
-      return [{ error: "Invalid credentials" }]
+      return ["Invalid credentials"]
+    }
+  }
+  const signUp = async ({ firstName, lastName, email, password }) => {
+    try {
+      await api.post("/sign-up", {
+        firstName,
+        lastName,
+        email,
+        password,
+      })
+
+      return [null, true]
+    } catch (err) {
+      return ["Oops. Something went wrong."]
     }
   }
   const signOut = () => {
@@ -34,6 +48,10 @@ export const AppContextProvider = (props) => {
 
   useEffect(() => {
     const jwt = localStorage.getItem(config.session.localStorageItemName)
+
+    if (!jwt) {
+      return
+    }
 
     const { payload } = jsonwebtoken.decode(jwt)
 
@@ -49,6 +67,7 @@ export const AppContextProvider = (props) => {
         },
         actions: {
           signIn,
+          signUp,
           signOut,
         },
       }}

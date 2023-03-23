@@ -1,11 +1,12 @@
+import AppContext from "@/components/AppContext.jsx"
 import Button from "@/components/Button.jsx"
+import ErrorMessage from "@/components/ErrorMessage.jsx"
 import Form from "@/components/Form.jsx"
 import FormField from "@/components/FormField.jsx"
 import Page from "@/components/Page.jsx"
-import config from "@/config.js"
-import axios from "axios"
 import { Formik } from "formik"
 import { useRouter } from "next/router.js"
+import { useContext, useState } from "react"
 import * as yup from "yup"
 
 const validationSchema = yup.object().shape({
@@ -16,14 +17,23 @@ const validationSchema = yup.object().shape({
 })
 
 const SignUpPage = () => {
+  const [error, setError] = useState(null)
   const router = useRouter()
+  const {
+    actions: { signUp },
+  } = useContext(AppContext)
   const handleSubmit = async (values) => {
-    try {
-      await axios.post(`${config.api.baseURL}/sign-up`, values)
+    setError(null)
+
+    const [error, result] = await signUp(values)
+
+    if (result) {
       router.push("/sign-in")
-    } catch (err) {
-      // TODO handle error
+
+      return
     }
+
+    setError(error)
   }
 
   return (
@@ -39,6 +49,7 @@ const SignUpPage = () => {
         validationSchema={validationSchema}
       >
         <Form>
+          <ErrorMessage>{error}</ErrorMessage>
           <FormField
             name="firstName"
             label="First name"
