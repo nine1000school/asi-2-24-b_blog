@@ -1,3 +1,4 @@
+import Loader from "@/components/Loader.jsx"
 import config from "@/config.js"
 import axios from "axios"
 import jsonwebtoken from "jsonwebtoken"
@@ -69,11 +70,7 @@ export const AppContextProvider = (props) => {
   }, [])
 
   if (session === null) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white">
-        <span className="animate-bounce text-4xl font-bold">Loading...</span>
-      </div>
-    )
+    return <Loader />
   }
 
   return (

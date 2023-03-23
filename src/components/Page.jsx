@@ -54,16 +54,18 @@ const Page = (props) => {
         </div>
       </header>
       <section>
+        {title && (
+          <h1 className="mb-2 mt-6 p-4 text-2xl font-semibold">{title}</h1>
+        )}
         <div
           className={clsx(
-            "mx-auto mt-8 p-4 md:max-w-4xl lg:p-0",
+            "mx-auto p-4 md:max-w-4xl lg:p-0",
             {
               "flex flex-col gap-2": !noSpacing,
             },
             className
           )}
         >
-          {title && <h1 className="mb-4 text-2xl font-semibold">{title}</h1>}
           {children}
         </div>
       </section>

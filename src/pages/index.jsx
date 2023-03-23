@@ -1,5 +1,6 @@
 import AppContext from "@/components/AppContext.jsx"
 import Page from "@/components/Page.jsx"
+import Post from "@/components/Post.jsx"
 import { useContext, useEffect, useState } from "react"
 
 const Home = () => {
@@ -17,9 +18,9 @@ const Home = () => {
   }, [api])
 
   return (
-    <Page title="Welcome to my blog!">
+    <Page title="Welcome to my blog!" className="gap-12">
       {posts.map((post) => (
-        <p key={post._id}>{post.title}</p>
+        <Post key={post._id} post={post} summary />
       ))}
     </Page>
   )
