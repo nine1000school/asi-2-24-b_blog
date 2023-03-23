@@ -6,8 +6,14 @@ import { createContext, useEffect, useState } from "react"
 const AppContext = createContext()
 
 export const AppContextProvider = (props) => {
+  const [jwt, setJWT] = useState(null)
   const [session, setSession] = useState(null)
   const api = axios.create({
+    headers: jwt
+      ? {
+          Authorization: `bearer ${jwt}`,
+        }
+      : {},
     baseURL: config.api.baseURL,
   })
   const signIn = async ({ email, password }) => {
@@ -20,6 +26,7 @@ export const AppContextProvider = (props) => {
 
       const { payload } = jsonwebtoken.decode(jwt)
 
+      setJWT(jwt)
       setSession(payload)
 
       return [null, true]
@@ -50,13 +57,24 @@ export const AppContextProvider = (props) => {
     const jwt = localStorage.getItem(config.session.localStorageItemName)
 
     if (!jwt) {
+      setSession(false)
+
       return
     }
 
     const { payload } = jsonwebtoken.decode(jwt)
 
+    setJWT(jwt)
     setSession(payload)
   }, [])
+
+  if (session === null) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white">
+        <span className="animate-bounce text-4xl font-bold">Loading...</span>
+      </div>
+    )
+  }
 
   return (
     <AppContext.Provider

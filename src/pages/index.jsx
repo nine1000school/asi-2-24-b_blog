@@ -14,7 +14,7 @@ const Home = () => {
 
       setPosts(result)
     })()
-  })
+  }, [api])
 
   return (
     <Page title="Welcome to my blog!">
